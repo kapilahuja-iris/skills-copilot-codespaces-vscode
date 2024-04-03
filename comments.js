@@ -1,24 +1,25 @@
-// Create Web Server and listen to port 3000
-// Create a route for /comments
-// When user visits /comments, return a json object with a list of comments
+// Create web server
+// Create a web server that listens on the port 3000.
+// When you navigate to http://localhost:3000, it should return a response with a status code of 200 and the text "This is the home page!".
+// When you navigate to http://localhost:3000/comments, it should return a response with a status code of 200 and the text "This is the comments page!".
 
-const express = require("express");
-const app = express();
+const http = require('http');
+const url = require('url');
 
-app.get("/comments", (req, res) => {
-  res.json({
-    comments: [
-      { username: "Alice", comment: "I love apples!" },
-      { username: "Bob", comment: "Where is the apple tree?" },
-      { username: "Eve", comment: "I want to eat an apple." }
-    ]
-  });
+const server = http.createServer((req, res) => {
+  const urlPath = url.parse(req.url).pathname;
+  if (urlPath === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('This is the home page!');
+  } else if (urlPath === '/comments') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
+    res.end('This is the comments page!');
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Page not found');
+  }
 });
 
-app.listen(3000, () => {
-  console.log("Server is listening on port 3000");
+server.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
 });
-
-// Run this file using node comments.js
-// Visit http://localhost:3000/comments in your browser
-// You should see a json object with a list of comments
